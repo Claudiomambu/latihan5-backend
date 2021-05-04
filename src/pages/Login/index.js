@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import Button from "../../components/atom/Button";
 import Input from "../../components/atom/Input";
+import firebase from "../../config/Firebase";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  let history = useHistory();
 
   const handleSubmit = () => {
     const data = {
-      username: username,
+      email: email,
       password: password,
     };
-    console.log(data);
+    //console.log(data);
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((res) => history.push("/"))
+      .catch((error) => console.log("Error", error));
   };
 
   return (
@@ -20,10 +28,10 @@ const Login = () => {
 
       <Input
         className="form-control form-control-sm"
-        label="Username"
-        placeholder="Masukan username"
-        value={username}
-        onChange={(event) => setUsername(event.target.value)}
+        label="Email"
+        placeholder="Masukan email "
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
       />
 
       <Input
